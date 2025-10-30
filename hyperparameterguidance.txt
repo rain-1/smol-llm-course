@@ -1,0 +1,75 @@
+Key Hyperparameters:
+
+Learning Rate (5e-5 to 1e-4): Controls how much the model weights change with each update
+
+    Start with 5e-5 for SmolLM3; this is conservative and stable.
+    Too high: The model becomes unstable; loss oscillates or explodes.
+    Too low: The model learns very slowly and may not converge in reasonable time.
+
+Batch Size (4-16): Number of examples processed simultaneously
+
+    Larger batches: More stable gradients, but require more GPU memory.
+    Smaller batches: Less memory usage, but noisier gradients.
+    Use gradient accumulation to achieve larger effective batch sizes.
+
+Max Sequence Length (2048-4096): Maximum tokens per training example
+
+    Longer sequences: Can handle more complex conversations.
+    Shorter sequences: Faster training, less memory usage.
+    Match your use case: Use the typical length of your target conversations.
+
+Training Steps (1000-5000): Total number of parameter updates
+
+    Depends on dataset size: More data usually requires more steps.
+    Monitor validation loss: Stop when it stops improving.
+    Rule of thumb: Three to five epochs through your dataset.
+
+Warmup Steps (10% of total): Gradual learning rate increase at start
+
+    Prevents early instability: Helps the model adapt gradually.
+    Typical range: 100-500 steps for most SFT tasks.
+
+    Hyperparameter starting points for SmolLM3:
+
+    To bootstrap your training, you can use the following hyperparameters:
+
+    Learning Rate:
+
+# Conservative (stable, slower)
+learning_rate = 5e-5
+
+# Balanced (recommended)
+learning_rate = 1e-4
+
+# Aggressive (faster, less stable)
+learning_rate = 2e-4
+
+Batch Size:
+
+We can reduce GPU device batch size by using gradient accumulation.
+
+# Limited GPU Memory
+per_device_train_batch_size = 2
+gradient_accumulation_steps = 8
+
+# Balanced GPU Memory
+per_device_train_batch_size = 4
+gradient_accumulation_steps = 4
+
+# More GPU Memory
+per_device_train_batch_size = 8
+gradient_accumulation_steps = 2
+
+Max Sequence Length:
+
+# Very short sequences
+max_length = 512
+
+# Short sequences
+max_length = 1024
+
+# Long sequences 
+max_length = 2048
+
+# Very long sequences
+max_length = 4096
