@@ -1,0 +1,35 @@
+# Simple Trackio integration
+import trackio
+
+# Initialize tracking
+trackio.init(project="smollm3-sft")
+
+# Log metrics during training
+trackio.log({"train_in_loss": 0.5, "learning_rate": 5e-5})
+
+# Finish tracking
+trackio.finish()
+
+The most convenient way to track your training is to use trackio’s transformers integration. You can specify your Trackio project name and space ID using environment variables:
+
+export TRACKIO_PROJECT_NAME="my-project"
+export TRACKIO_SPACE_ID="username/space_id"
+
+Or you can set them in your code:
+
+import os
+
+os.environ["TRACKIO_PROJECT_NAME"] = "my-project"
+os.environ["TRACKIO_SPACE_ID"] = "username/space_id"
+
+Then you can use the SFTTrainer class from TRL to track your training and let it handle the tracking for you.
+
+from trl import SFTTrainer
+
+trainer = SFTTrainer(
+    model=model,
+    train_dataset=dataset["train"],
+    args=config,
+)
+
+Trackio will serve an application with the metrics from training that looks like this:
